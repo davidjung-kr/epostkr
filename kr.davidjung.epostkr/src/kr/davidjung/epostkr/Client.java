@@ -6,12 +6,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Client {
 	private String url;
-	private int status;
+	private int status = 0;
 	private String body;
+	
+	/**
+	 * »ý¼ºÀÚ
+	 * @param url
+	 */
 	public Client(String url) {
 		this.url = url;
 	}
@@ -48,26 +54,34 @@ public class Client {
         return response.toString();
 	}
 	
-	public void actionGet() throws IOException {
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0");
-
-		this.status = con.getResponseCode();
-
-		BufferedReader in = new BufferedReader(
-			new InputStreamReader(con.getInputStream())
-		);
-		
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-        
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
+	public void actionGet() {
+		URL obj;
+		try {
+			obj = new URL(url);
+			HttpURLConnection con;
+			con = (HttpURLConnection) obj.openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0");
+			this.status = con.getResponseCode();
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(con.getInputStream())
+				);
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+	        
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			
+			this.body = response.toString();
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		in.close();
-		
-		this.body = response.toString();
 	}
 	
 	public String getBody() {
