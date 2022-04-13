@@ -22,7 +22,14 @@ public class Client {
 		this.url = url;
 	}
 	
-	public String actionPost (String[] keys, String[] values) throws IOException {
+	/**
+	 * POST
+	 * @param keys
+	 * @param values
+	 * @return
+	 * @throws IOException
+	 */
+	public String post (String[] keys, String[] values) throws IOException {
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0");
@@ -54,17 +61,18 @@ public class Client {
         return response.toString();
 	}
 	
-	public void actionGet() {
+	/**
+	 * GET
+	 */
+	public void get() {
 		URL obj;
 		try {
 			obj = new URL(url);
-			HttpURLConnection con;
-			con = (HttpURLConnection) obj.openConnection();
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0");
 			this.status = con.getResponseCode();
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(con.getInputStream())
-				);
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()) );
+			
 			String inputLine;
 			StringBuffer response = new StringBuffer();
 	        
@@ -84,6 +92,10 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Get contents
+	 * @return
+	 */
 	public String getBody() {
 		return this.body;
 	}

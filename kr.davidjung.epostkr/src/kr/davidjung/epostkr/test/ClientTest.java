@@ -10,7 +10,7 @@ class ClientTest {
 	@Test
 	void testClient() {		
 		Client client = new Client("http://httpbin.org/get");
-		client.actionGet();
+		client.get();
 		assertEquals(200, client.getStatus());
 	}
 }
