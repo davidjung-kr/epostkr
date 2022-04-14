@@ -13,4 +13,13 @@ class ClientTest {
 		client.get();
 		assertEquals(200, client.getStatus());
 	}
+	
+	@Test
+	void testClientPost() {		
+		Client client = new Client("http://httpbin.org/get");
+		String[] keys = {"TEST"};
+		String[] values = {"TEST"};
+		client.post(keys, values);
+		assertEquals(200, client.getStatus());
+	}
 }

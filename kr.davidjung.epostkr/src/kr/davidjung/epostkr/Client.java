@@ -29,36 +29,48 @@ public class Client {
 	 * @return
 	 * @throws IOException
 	 */
-	public String post (String[] keys, String[] values) throws IOException {
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0");
-		con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		con.setRequestMethod("POST");
-        con.setDoInput(true);
-        con.setDoOutput(true);
-		StringBuffer postParams = new StringBuffer();
+	public String post (String[] keys, String[] values) {
+		URL obj;
 		
-		for(int i=0; i<keys.length; i++) {
-			postParams.append(keys[i]).append("=").append(values[i]);
+		try {
+			obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0");
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			con.setRequestMethod("POST");
+	        con.setDoInput(true);
+	        con.setDoOutput(true);
+			StringBuffer postParams = new StringBuffer();
+			
+			for(int i=0; i<keys.length; i++) {
+				postParams.append(keys[i]).append("=").append(values[i]);
+			}
+			
+			// Request
+	        OutputStreamWriter wStream = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
+	        PrintWriter wPrint = new PrintWriter(wStream);
+	        wPrint.write(postParams.toString());
+	        wPrint.flush();
+	        wPrint.close();
+	        
+	        // Get Response
+	        InputStreamReader rStream = new InputStreamReader(con.getInputStream(), "UTF-8");
+	        BufferedReader reader = new BufferedReader(rStream);
+	        StringBuilder response = new StringBuilder();
+	        String str;
+	        while ((str = reader.readLine()) != null) {
+	        	response.append(str + "\n");
+	        }
+	        this.body = response.toString();
 		}
-		
-		// Request
-        OutputStreamWriter wStream = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
-        PrintWriter wPrint = new PrintWriter(wStream);
-        wPrint.write(postParams.toString());
-        wPrint.flush();
-        wPrint.close();
-        
-        // Get Response
-        InputStreamReader rStream = new InputStreamReader(con.getInputStream(), "UTF-8");
-        BufferedReader reader = new BufferedReader(rStream);
-        StringBuilder response = new StringBuilder();
-        String str;
-        while ((str = reader.readLine()) != null) {
-        	response.append(str + "\n");
-        }
-        return response.toString();
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return body;
 	}
 	
 	/**
