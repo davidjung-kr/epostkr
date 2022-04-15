@@ -17,9 +17,14 @@ public class Client {
 	/**
 	 * »ý¼ºÀÚ
 	 * @param url
+	 * @throws Exception 
 	 */
-	public Client(String url) {
+	public Client(String url) throws Exception {
 		this.url = url;
+		
+		if(url.indexOf("http") < 0) {
+			throw new Exception();
+		}
 	}
 	
 	/**
@@ -72,7 +77,7 @@ public class Client {
 		}
 		return body;
 	}
-	
+
 	/**
 	 * GET
 	 */
